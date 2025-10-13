@@ -1,0 +1,94 @@
+{
+  "name": "01_action_node_editFields",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        -240
+      ],
+      "id": "8e1a6413-6ac2-4101-a436-eef156557807",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://jsonplaceholder.typicode.com/todos/2",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -64,
+        -240
+      ],
+      "id": "89ed0eb0-3f47-46fd-b9bd-34f139fc8a34",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "6e004373-7af2-484c-bb0b-edd2f82dfd7b",
+              "name": "유저 아이디",
+              "value": "={{ $json.userId }}",
+              "type": "number"
+            },
+            {
+              "id": "73a71496-12c4-46c5-bc33-52ac465b05ec",
+              "name": "타이틀",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        144,
+        -240
+      ],
+      "id": "f340d0b8-604d-4599-b2ff-54582595ef46",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d0ffb378-c07b-4af0-8e58-392d3efc25ab",
+  "meta": {
+    "instanceId": "ffdee27c5ac96a4ad856bb831a5135d6c6b403bb2f8bc6e2eb43d54aae46977e"
+  },
+  "id": "olf1d5cKyxeHMAXq",
+  "tags": []
+}
