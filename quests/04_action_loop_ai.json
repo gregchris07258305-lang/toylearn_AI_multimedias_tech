@@ -1,0 +1,318 @@
+{
+  "name": "quests/04_action_loop_ai.json",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -528,
+        -128
+      ],
+      "id": "1562fa88-2045-4bb9-b009-8c018698f328",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.feeds }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.2,
+      "position": [
+        272,
+        -112
+      ],
+      "id": "d0fb4534-f107-4859-997a-6cdd42360f2d",
+      "name": "RSS Read"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        416,
+        -112
+      ],
+      "id": "017118c7-0423-4239-9700-0100e7a350e7",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n\"feeds\": [\n\"https://www.chosun.com/arc/outboundfeeds/rss/?outputType=xml\",\n\"https://www.yna.co.kr/rss/industry.xml\",\n  \"https://www.chosun.com/arc/outboundfeeds/rss/category/entertainments/?outputType=xml\",\n\"https://www.chosun.com/arc/outboundfeeds/rss/category/sports/?outputType=xml\",\n\"https://www.chosun.com/arc/outboundfeeds/rss/category/opinion/?outputType=xml\",\n\"https://www.chosun.com/arc/outboundfeeds/rss/category/culture-life/?outputType=xml\",\n\"https://www.chosun.com/arc/outboundfeeds/rss/category/economy/?outputType=xml\",\n\"https://www.chosun.com/arc/outboundfeeds/rss/category/politics/?outputType=xml\"\n]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -368,
+        -128
+      ],
+      "id": "98a7943e-eff4-4f2a-9104-dcf1fc6353ac",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "feeds",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -128
+      ],
+      "id": "040ec10a-fa6f-4159-9ad6-437e406d99b2",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -32,
+        -128
+      ],
+      "id": "b6532e69-7729-4583-9270-24bb3356cec5",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b9f9d720-0846-40d0-bafa-1d8f25df249c",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "7b3c8ff0-0321-4297-bf92-3db6df2231e7",
+              "name": "link",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "01c2740b-a665-439e-a2f4-efe2b1feef04",
+              "name": "content",
+              "value": "={{ $json['content:encodedSnippet'] }}{{ $json.contentSnippet }}",
+              "type": "string"
+            },
+            {
+              "id": "6ebe7db0-d04e-4974-94d7-0c13ac9c195c",
+              "name": "pubDate",
+              "value": "={{ $json.pubDate }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -368,
+        96
+      ],
+      "id": "1e3a0cc7-d100-407a-96ab-ecb63233a388",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "chatId": "8251791073",
+        "text": "={{ $json.content.parts[0].text }}",
+        "additionalFields": {
+          "appendAttribution": true
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        432,
+        96
+      ],
+      "id": "32afd7f7-5b8c-4526-8dda-62bb9ce43d27",
+      "name": "Send a text message",
+      "webhookId": "26cfc8c3-ea14-4997-9d23-44b9fe31faf3",
+      "credentials": {
+        "telegramApi": {
+          "id": "640E2bixcZmjJeyD",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=기사 내용을 일부 간략화 해줘\n\n- content 필드 값을 10자로 간략하게 줄여줘\n- 나머지 필드 값은 그대로 유지\n \n##기사 내용\n{\n  \"title\": {{ $json.title }},\n  \"link\": {{ $json.link }},\n  \"content\": {{ $json.content }},\n  \"pubDate\": {{ $json.pubDate }}\n}\n##출력예시 \n타이틀 : \n링크 : \n기사 내용 : \n발행 날짜 :\n\n## 제외사항 \n구어체"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        128,
+        96
+      ],
+      "id": "8607bf3d-7203-48f8-9292-d82b08f0d022",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yCMVUXMr3Fr4muZz",
+          "name": "251017 gemini api"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        96
+      ],
+      "id": "5d5c4454-72fe-4699-a00e-99b152b2e6c4",
+      "name": "Limit1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Read": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "RSS Read",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "55f0918b-0d1a-4c6b-99e2-bed49b9ee4e9",
+  "meta": {
+    "instanceId": "ffdee27c5ac96a4ad856bb831a5135d6c6b403bb2f8bc6e2eb43d54aae46977e"
+  },
+  "id": "04e0Q4QRpB0k3LG6",
+  "tags": []
+}
