@@ -1,4 +1,29 @@
-**[개선 반영] 예비 지원서 초안**
+## 프롬포트
+
+```python
+1. 당신은 20년차 대기업 인재 채용 전문가입니다.
+예비지원서를 인재상 기반 정량 평가 기준표로 해석한다면 몇 점인지 확인해주세요
+[샘플_예비 지원서]
+https://docs.google.com/document/d/18I9Sy3pryAQaW30asB47NWM-B2cAjEeH9A9UJ-VDIXo/edit?tab=t.0
+[인재상 기반 정량 평가 기준표]
+https://docs.google.com/document/d/1pANbis5zdNuIeAW6FdmDlbzhgN8jZ7Kvy3pwW77WYvI/edit?tab=t.0#heading=h.20tso3ksp9tf
+
+```
+
+```python
+2. 당신이 말한 개선 제안을 포함한 지원서를 새롭게 작성하려고 합니다. 
+새롭게 작성되는 지원서는 하기 정보을 바탕으로 각색하여 아웃풋 폼으로 작성 부탁드립니다.
+
+[정보]
+황지상 / gregchris@naver.com / 010-4299-9300 / 서대문구 연희동 / 보유 경력 : 의류 패션 마케팅 3년, 의류 패션 세일즈 3년, 25만규모 웹 매거진 객원 에디터/ 보유 기술 : AI기술 (생성형 ai, 노코딩) / 성격은 끈기있다
+
+[아웃풋 폼]
+https://docs.google.com/document/d/18I9Sy3pryAQaW30asB47NWM-B2cAjEeH9A9UJ-VDIXo/edit?tab=t.0
+```
+
+
+
+# 예비 지원서 초안
 
 **개인 정보**
 
