@@ -1,0 +1,732 @@
+{
+  "name": "quests/05_gathering_HTTPRequest.json",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://api.finance.naver.com/siseJson.naver",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "symbol",
+              "value": "={{ $json.symbol }}"
+            },
+            {
+              "name": "requestType",
+              "value": "1"
+            },
+            {
+              "name": "startTime",
+              "value": "={{ $json.startTime }}"
+            },
+            {
+              "name": "endTime",
+              "value": "={{ $json.endTime }}"
+            },
+            {
+              "name": "timeframe",
+              "value": "day"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -528,
+        128
+      ],
+      "id": "d83a24b6-48c7-4ec4-93a1-be7fdf144c61",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "이번 분석에서는 최근 3개월 종가 데이터를 기반으로 다음 사항들을 종합적으로 평가해 주세요.\n가격 추이와 주요 변동\n거래량과 외국인 소진율의 흐름\n투자 전략 관점의 해석\n점수를 0~100으로 산출하고, 그 근거를 이유에 상세히 적어주세요.\n{{ $json.data }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        -240
+      ],
+      "id": "70699545-75c8-4e38-9570-39394c7150dc",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yCMVUXMr3Fr4muZz",
+          "name": "251017 gemini api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "주식 종목 정보 입력",
+        "formDescription": "주식 종목 정보 입력하여 관련 기간 동안 데이터로 분석.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "symbol"
+            },
+            {
+              "fieldLabel": "startTime"
+            },
+            {
+              "fieldLabel": "endTime"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -784,
+        128
+      ],
+      "id": "37346aa9-d662-4def-93de-5cbc0a624f28",
+      "name": "On form submission",
+      "webhookId": "a8b3b21f-7f3e-4366-91e3-f49c50556788"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "다음은 하나의 종목에 대한 100일 이상 마일의 추가 주가 데이터야. 이 데이터를 기반으로 시계열 예측 및 기법 분석(ARIMA/SARIMA, LSTM, 변동성/수익률 분석 등)을 이용해 앞으로의 7일 주가를 예측하고 각 예측 모델의 정확도를 평가한 종합 결과를 작성해줘.\\n\\n출력은 정확한 JSON 형식이어야 해. 예시는 아래와 같아:\\n\\n{\\\"score\\\": (0~100), \\\"reason\\\": (상세 분석 근거)}\\n\\n\n데이터는 아래와 같아:"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        16
+      ],
+      "id": "5bec28b7-761f-4efe-a4e7-59477df70e05",
+      "name": "Message a model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yCMVUXMr3Fr4muZz",
+          "name": "251017 gemini api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e9d20295-6c57-44e6-af2b-5cf2ae1dd96d",
+              "name": "title",
+              "value": "종가 데이터 분석",
+              "type": "string"
+            },
+            {
+              "id": "11e7b68d-508f-4f57-839b-0fde05b8cbdd",
+              "name": "=score",
+              "value": "={{ JSON.parse($json.candidates[0].content.parts[0].text).score }}\n",
+              "type": "string"
+            },
+            {
+              "id": "8255a938-8305-4173-a8ed-995549f9c89e",
+              "name": "reason",
+              "value": "={{ JSON.parse($json.candidates[0].content.parts[0].text).reason }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        -240
+      ],
+      "id": "3139a7e9-0075-4ee5-9196-c0d1bd0acca1",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        592,
+        64
+      ],
+      "id": "673795b3-37f0-46e1-b0c9-8d161c873aa1",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "title"
+            },
+            {
+              "fieldToAggregate": "score"
+            },
+            {
+              "fieldToAggregate": "reason"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        816,
+        96
+      ],
+      "id": "ffcc44ab-4a47-4768-bef4-1d501f6d3b8b",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-pro",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-pro"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=아래는 주가 분석 프로젝트의 핵심 데이터이다.\n이 데이터는 ‘종가 데이터 분석’, ‘시계열 모델 분석’, 두 가지 범주로 구성되어 있다.\n각 항목의 세부 분석 내용(reason)과 모델 신뢰도(score)를 기반으로, 다음 조건에 맞는 **최종 분석 결과 요약 보고서**를 작성하라.\n요구사항:\n1. 각 분석 범주의 핵심 포인트를 종합하고, 서로의 관계를 설명하라.\n2. 모델 성능 점수(score)에 따른 신뢰도 해석을 포함하라.\n3. 예측 결과에 대한 종합 의견을 제시하고, 중장기 투자 시사점을 정리하라.\n4. 데이터의 한계, 예측 오차 범위, 외부 요인에 대한 언급을 포함하라.\n5. 리포트 마지막에는 “예측의 신뢰도 종합평가” 섹션을 추가하라.\n입력 데이터:\ntitle : {{ $json.title }}\nscore : {{ $json.score }}\nreason : {{ $json.reason }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        1072,
+        96
+      ],
+      "id": "1da64657-7c5f-40e2-bdf7-ad4a1fd38073",
+      "name": "Message a model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yCMVUXMr3Fr4muZz",
+          "name": "251017 gemini api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb7c2fa0-6331-4a10-9645-97f388cb376d",
+              "name": "title",
+              "value": "시계열 모델 분석",
+              "type": "string"
+            },
+            {
+              "id": "11e7b68d-508f-4f57-839b-0fde05b8cbdd",
+              "name": "=score",
+              "value": "={{ JSON.parse($json.candidates[0].content.parts[0].text).score }}\n",
+              "type": "string"
+            },
+            {
+              "id": "8255a938-8305-4173-a8ed-995549f9c89e",
+              "name": "reason",
+              "value": "={{ JSON.parse($json.candidates[0].content.parts[0].text).reason }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        16
+      ],
+      "id": "def9e9f9-3933-4a53-a756-c8e3ff35fdf4",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb7c2fa0-6331-4a10-9645-97f388cb376d",
+              "name": "title",
+              "value": "기술적 지표 분석 방식",
+              "type": "string"
+            },
+            {
+              "id": "11e7b68d-508f-4f57-839b-0fde05b8cbdd",
+              "name": "=score",
+              "value": "={{ JSON.parse($json.candidates[0].content.parts[0].text).sco }}\n",
+              "type": "string"
+            },
+            {
+              "id": "8255a938-8305-4173-a8ed-995549f9c89e",
+              "name": "reason",
+              "value": "={{ JSON.parse($json.candidates[0].content.parts[0].text).reason }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        272
+      ],
+      "id": "550ce470-a75d-4596-a503-7b8baa035f52",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "= 하기의 정보를 바탕으로 수급 분석 방식으로 분석하여 평가해주세요.\n각 점수는 0~100으로 산출하고, 그 근거에 대한 이유를 상세히 적어주세요.\n {{ $json.data }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        480
+      ],
+      "id": "719e8c56-23a1-4ebb-98ba-2d57dcf93c91",
+      "name": "Message a model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yCMVUXMr3Fr4muZz",
+          "name": "251017 gemini api"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb7c2fa0-6331-4a10-9645-97f388cb376d",
+              "name": "title",
+              "value": "수급 분석 방식",
+              "type": "string"
+            },
+            {
+              "id": "11e7b68d-508f-4f57-839b-0fde05b8cbdd",
+              "name": "=score",
+              "value": "={{ JSON.parse($json.candidates[0].content.parts[0].text).score }}\n",
+              "type": "string"
+            },
+            {
+              "id": "8255a938-8305-4173-a8ed-995549f9c89e",
+              "name": "reason",
+              "value": "={{ JSON.parse($json.candidates[0].content.parts[0].text).reason }}\n",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        176,
+        480
+      ],
+      "id": "e5b2b5b1-1728-4bb1-b583-e8b3b4a9a342",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=하기의 정보를 바탕으로 기술적 지표 분석 방식으로 분석하여 평가해주세요.\n각 점수는 0~100으로 산출하고, 그 근거에 대한 이유를 상세히 적어주세요.\n\n {{ $json.data }}"
+            }
+          ]
+        },
+        "simplify": false,
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        272
+      ],
+      "id": "91aab622-aecf-49b1-9828-148dc584a463",
+      "name": "Message a model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yCMVUXMr3Fr4muZz",
+          "name": "251017 gemini api"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Message a model4": [
+      {
+        "json": {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "{\n  \"score\": 92,\n  \"reason\": \"제공된 주가 데이터가 없어 실제 예측을 수행할 수는 없으나, 주어진 요청에 따라 시계열 예측 및 기법 분석(ARIMA/SARIMA, LSTM, 변동성/수익률 분석)을 이용한 7일 주가 예측 및 모델 정확도 평가에 대한 종합적인 분석 과정을 설명합니다.\\n\\n**1. 데이터 전처리 및 탐색적 분석 (Data Preprocessing & EDA)**\\n*   **결측치 및 이상치 처리:** 제공된 100일 이상의 주가 데이터에서 결측값(NaN)이 있다면 선형 보간(linear interpolation) 또는 이전 값으로 채우기(forward fill) 등의 방법으로 처리합니다. 급격한 주가 변동이 이상치로 판단될 수 있으나, 주가 데이터의 특성상 실제 이벤트에 의한 것일 수 있으므로 신중하게 접근합니다.\\n*   **데이터 정규화/스케일링:** LSTM과 같은 신경망 모델은 입력 데이터의 스케일에 민감하므로, Min-Max Scaler 또는 Standard Scaler를 사용하여 데이터를 0과 1 사이 또는 평균 0, 표준편차 1로 스케일링합니다.\\n*   **시계열 특성 확인:** 주가 데이터를 시각화하여 추세(trend), 계절성(seasonality, 주가는 덜 명확), 주기성(cyclicity) 등의 패턴을 파악합니다. 이동 평균(Moving Average)과 이동 표준편차(Moving Standard Deviation)를 계산하여 비정상성(non-stationarity) 여부를 시각적으로 확인합니다.\\n*   **정상성 검정:** ADF(Augmented Dickey-Fuller) 테스트를 통해 데이터의 정상성을 통계적으로 검정합니다. ARIMA 모델 적용을 위해 필요합니다.\\n\\n**2. 시계열 예측 모델**\\n\\n**2.1. ARIMA/SARIMA 모델**\\n*   **개념:** ARIMA(Autoregressive Integrated Moving Average) 모델은 시계열 데이터의 과거 값, 오차 항, 그리고 차분(differencing)을 통해 미래 값을 예측하는 통계 모델입니다. AR(자기회귀), I(차분), MA(이동평균) 세 가지 구성 요소가 있습니다.\\n*   **적용 과정:**\\n    *   **차분(Differencing):** ADF 테스트 결과 비정상 시계열일 경우, d차 차분을 통해 데이터를 정상 상태로 만듭니다. (d 값 결정)\\n    *   **모수 결정:** 차분된 데이터의 ACF(Autocorrelation Function) 플롯과 PACF(Partial Autocorrelation Function) 플롯을 분석하여 AR 부분의 p, MA 부분의 q 모수를 결정합니다.\\n    *   **모델 학습 및 예측:** ARIMA(p, d, q) 모델을 훈련 데이터에 적합(fit)시키고, 향후 7일간의 주가를 예측합니다.\\n*   **SARIMA (Seasonal ARIMA):** 주가 데이터는 명확한 계절성을 띠지 않을 수 있지만, 특정 요일 효과나 월별 효과 등이 있다면 SARIMA(p, d, q)(P, D, Q, m) 모델을 고려할 수 있습니다.\\n*   **장점:** 선형적인 시계열 패턴에 강하며, 비교적 적은 데이터로도 모델링이 가능합니다.\\n*   **단점:** 비선형적인 패턴이나 급격한 시장 변화에는 취약하며, 주식 시장의 복잡한 역학 관계를 포착하기 어렵습니다.\\n\\n**2.2. LSTM (Long Short-Term Memory) 모델**\\n*   **개념:** LSTM은 순환 신경망(RNN)의 한 종류로, 장기 의존성 문제를 해결하여 시퀀스 데이터 학습에 매우 효과적입니다. 주가와 같은 시계열 데이터의 장기적인 패턴을 학습하는 데 적합합니다.\\n*   **적용 과정:**\\n    *   **시퀀스 데이터 생성:** 주가 데이터를 (과거 N일의 주가) -> (다음 날의 주가)와 같은 시퀀스-투-시퀀스 형태로 변환합니다. '룩백 윈도우(look-back window)' 크기를 설정하여 입력 시퀀스를 구성합니다.\\n    *   **모델 구축:** 입력 레이어, 하나 이상의 LSTM 레이어, 드롭아웃(Dropout) 레이어(과적합 방지), Dense 레이어(출력 레이어) 등으로 모델을 구성합니다.\\n    *   **모델 학습 및 예측:** 스케일링된 훈련 데이터로 LSTM 모델을 학습시키고, 7일 예측을 위해 예측된 값을 다시 입력으로 사용하는 재귀적(recursive) 방식을 사용하거나 멀티-아웃풋(multi-output) 모델을 구축할 수 있습니다. 예측 후에는 스케일링을 되돌려 원래 주가 스케일로 복원합니다.\\n*   **장점:** 비선형적이고 복잡한 시계열 패턴을 학습하는 데 탁월하며, 시장의 미묘한 변화를 포착할 가능성이 높습니다.\\n*   **단점:** 충분한 양의 데이터가 필요하며, ARIMA에 비해 계산 비용이 높고, 모델의 내부 작동 방식이 '블랙박스'처럼 해석하기 어렵습니다.\\n\\n**3. 변동성 및 수익률 분석 (Volatility & Returns Analysis)**\\n*   **수익률 계산:** 일별 주가 데이터를 이용하여 로그 수익률(log returns) 또는 단순 수익률(simple returns)을 계산합니다. 수익률 분포를 분석하여 정규성 여부와 왜도(skewness), 첨도(kurtosis)를 파악합니다.\\n*   **변동성 측정:** 수익률의 표준편차를 계산하여 주가의 변동성을 측정합니다. 변동성 군집(volatility clustering) 현상(큰 변동성 뒤에 큰 변동성이, 작은 변동성 뒤에 작은 변동성이 이어지는 현상)을 확인합니다.\\n*   **GARCH/ARCH 모델:** 주가의 변동성이 시간에 따라 변하는 이분산성(heteroscedasticity)을 모델링하기 위해 GARCH(Generalized Autoregressive Conditional Heteroskedasticity) 또는 ARCH(Autoregressive Conditional Heteroskedasticity) 모델을 사용할 수 있습니다. 이 모델들은 주가 예측 자체보다는 미래의 변동성(위험)을 예측하고, 예측 주가의 신뢰 구간을 설정하는 데 중요합니다.\\n*   **역할:** 이 분석은 주가 예측 모델의 성능을 보완하고, 예측된 주가에 대한 위험도를 평가하여 투자 의사결정에 중요한 정보를 제공합니다.\\n\\n**4. 모델 정확도 평가 및 비교**\\n*   **데이터 분할:** 전체 데이터를 훈련 세트(예: 80-90%)와 테스트 세트(예: 10-20%)로 분할합니다. 시계열 데이터의 특성상 미래 시점을 예측해야 하므로, 반드시 시간 순서에 따라 분할합니다.\\n*   **평가 지표:** 각 모델의 예측 성능을 객관적으로 평가하기 위해 다음과 같은 지표를 사용합니다.\\n    *   **RMSE (Root Mean Squared Error):** 예측 오차의 크기를 측정하며, 큰 오차에 더 큰 가중치를 줍니다.\\n    *   **MAE (Mean Absolute Error):** 예측 오차의 절대값 평균으로, 오차의 평균적인 크기를 직관적으로 나타냅니다.\\n    *   **MAPE (Mean Absolute Percentage Error):** 예측 오차를 백분율로 나타내어 상대적인 오차를 파악하기 용이합니다.\\n    *   **R-squared:** 모델이 얼마나 데이터의 분산을 잘 설명하는지 나타냅니다.\\n*   **교차 검증 (Cross-validation):** 시계열 데이터에는 일반적인 K-fold 교차 검증 대신 시계열 교차 검증(Time Series Cross-Validation) 기법을 사용하여 모델의 일반화 성능을 보다 신뢰성 있게 평가합니다.\\n*   **모델 비교:** ARIMA/SARIMA와 LSTM 모델의 평가 지표를 비교하여 어떤 모델이 제공된 데이터에서 더 우수한 예측 성능을 보이는지 파악합니다. 경우에 따라 두 모델의 예측값을 결합하는 앙상블(ensemble) 기법을 고려할 수도 있습니다.\\n\\n**5. 7일 주가 예측 및 종합 결론**\\n*   **최종 예측:** 가장 높은 정확도를 보인 모델(또는 앙상블 모델)을 최종 선택하여 향후 7일간의 주가를 예측합니다. LSTM은 단기 예측에 강점을 보일 수 있으며, ARIMA는 보다 안정적인 추세 예측에 적합할 수 있습니다.\\n*   **한계점:** 주가 예측은 본질적으로 매우 어렵습니다. 주식 시장은 과거 데이터의 패턴뿐만 아니라 뉴스, 경제 지표, 기업 실적, 거시 경제 상황, 투자 심리 등 예측 불가능한 다양한 외부 요인에 크게 영향을 받습니다. 따라서 어떤 모델도 100% 정확한 예측은 불가능하며, 모델은 단지 과거 데이터의 통계적 패턴을 기반으로 한 확률적 추정치일 뿐입니다.\\n*   **종합 의견:** 기술적 분석(시계열 예측)은 주가 움직임의 한 단면만을 제공합니다. 성공적인 투자 의사결정을 위해서는 기술적 분석과 함께 기업의 펀더멘털 분석, 거시 경제 분석, 그리고 시장 상황에 대한 깊은 이해가 필수적입니다.\"\n}"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 135,
+            "candidatesTokenCount": 2090,
+            "totalTokenCount": 3875,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 135
+              }
+            ],
+            "thoughtsTokenCount": 1650
+          },
+          "modelVersion": "gemini-2.5-flash",
+          "responseId": "YPL1aJaBIZeekdUPwNHsqQc"
+        }
+      }
+    ],
+    "Message a model": [
+      {
+        "json": {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "{\n  \"가격 추이와 주요 변동\": \"최근 3개월간 종가는 초기 하락(-10%) 후 견조한 회복 및 상승 흐름을 보였습니다. 10월 초 10,000원에서 시작하여 10월 말 9,000원까지 하락했으나, 이후 12월 중순 11,000원까지 상승하며 이전 고점을 넘어섰습니다. 기간 전체적으로는 약 8% 상승 마감했으나, 최근 12월 말에는 소폭 조정(-2.7%)을 거쳐 10,800원으로 마감했습니다. 9,000원대에서 강력한 지지선이 형성된 것으로 보이며, 전반적인 추세는 우상향이나 변동성이 존재합니다.\",\n  \"거래량과 외국인 소진율의 흐름\": \"거래량은 가격이 하락하던 10월 말에 가장 높은 수준(20만)을 기록하며 매도 압력이 강했음을 시사합니다. 이후 가격이 회복되면서 거래량은 점진적으로 감소하는 경향을 보였고, 최고가에 도달했던 12월 초에는 최저 수준(9만)까지 줄어들었습니다. 이는 가격 상승이 강력한 매수세보다는 매도 물량 감소에 기인했을 가능성을 나타냅니다. 최근 소폭의 가격 조정 시 거래량이 다시 증가한 것은 매도 압력이 재개되었을 수 있음을 시사합니다.\\n외국인 소진율은 가격 하락기에 함께 감소(0.35 → 0.31)하며 외국인 매도가 확인되었으나, 가격이 회복되는 시기에는 꾸준히 증가(0.31 → 0.38)하여 외국인 매수세가 주가 상승에 긍정적인 영향을 미쳤음을 보여줍니다. 다만, 최근 가격 조정과 함께 소진율 또한 소폭 감소(0.38 → 0.37)하여 외국인 투자자들의 움직임을 주의 깊게 살펴볼 필요가 있습니다.\",\n  \"투자 전략 관점의 해석\": \"이 종목은 초기 약세 후 성공적으로 회복하여 3개월 전보다 높은 수준으로 마감하는 긍정적인 흐름을 보였습니다. 특히 외국인 투자자들의 매수세가 가격 반등에 큰 역할을 한 것으로 분석됩니다. 그러나 가격 상승 시 거래량 감소는 상승 동력의 약화를 의미할 수 있으며, 최근 가격 하락 시 거래량 증가와 외국인 소진율 감소는 단기적인 조정 또는 매도 압력 증가 가능성을 경고합니다. 현재는 관망하며 추가적인 가격 및 거래량 추이를 지켜보는 신중한 접근이 필요합니다. 9,000원대의 강력한 지지선이 재차 확인될 경우 장기적인 매수 관점을 고려해볼 수 있으나, 단기적으로는 변동성에 유의해야 합니다.\",\n  \"점수\": 65,\n  \"이유\": \"가격은 큰 폭의 하락 이후 성공적인 회복세를 보여 3개월 전 대비 상승 마감하였고, 외국인 투자자들의 매수세가 주가 상승에 긍정적인 영향을 미쳤다는 점에서 높은 점수를 부여할 수 있습니다. 이는 종목의 잠재적 가치와 회복력을 나타냅니다. 하지만, 가격 상승 구간에서 거래량이 감소하는 '거래량 없는 상승' 패턴은 추세 지속성에 대한 의문을 제기하며, 최근 가격 조정 시 거래량 증가 및 외국인 소진율 감소는 단기적인 불안 요인으로 작용합니다. 이러한 리스크 요인들을 감안하여 100점 만점에 65점을 부여했습니다.\"\n}"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 83,
+            "candidatesTokenCount": 812,
+            "totalTokenCount": 4627,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 83
+              }
+            ],
+            "thoughtsTokenCount": 3732
+          },
+          "modelVersion": "gemini-2.5-flash",
+          "responseId": "Dfn1aKnYG47AxN8Pjva86Qw"
+        }
+      }
+    ],
+    "Message a model1": [
+      {
+        "json": {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "{\n  \"score\": 0,\n  \"reason\": \"제공된 주가 데이터가 없어 실제 시계열 예측 및 기법 분석(ARIMA/SARIMA, LSTM, 변동성/수익률 분석 등)을 수행할 수 없습니다. 데이터가 주어진다면 다음과 같은 절차로 분석을 진행했을 것입니다:\\n\\n1.  **데이터 준비 및 탐색:**\\n    *   주어진 100일 이상의 주가 데이터를 로드하고, 결측치 확인 및 시계열의 정상성(Stationarity) 여부를 ADF 테스트 등으로 분석했을 것입니다.\\n    *   데이터를 훈련 세트와 테스트 세트(예: 마지막 7일)로 분리했을 것입니다.\\n\\n2.  **변동성 및 수익률 분석:**\\n    *   일별 수익률을 계산하고, 수익률의 표준편차를 통해 주가의 변동성(Volatility)을 측정했을 것입니다. 이를 통해 주가의 위험 수준 및 일반적인 움직임을 파악했을 것입니다.\\n\\n3.  **ARIMA/SARIMA 모델링:**\\n    *   **ARIMA:** 시계열의 정상성을 확보하기 위해 필요한 차분(d) 횟수를 결정하고, ACF(자기상관 함수) 및 PACF(부분 자기상관 함수) 플롯을 분석하여 AR(p) 및 MA(q) 항의 최적 파라미터를 식별했을 것입니다. 최적의 (p, d, q) 모델을 훈련하여 향후 7일간의 주가를 예측했을 것입니다.\\n    *   **SARIMA:** 만약 주가 데이터에서 주간, 월간 등의 계절성 패턴이 관찰되었다면, SARIMA 모델을 사용하여 계절성 요소를 추가적으로 반영하여 예측 정확도를 높였을 것입니다.\\n\\n4.  **LSTM 모델링:**\\n    *   주가 데이터는 비선형적이고 복잡한 패턴을 가질 수 있으므로, 딥러닝 기반의 LSTM(Long Short-Term Memory) 신경망 모델을 적용했을 것입니다.\\n    *   데이터를 LSTM 모델 입력에 적합한 시퀀스 형태로 변환(예: Look-back Window)하고 정규화했을 것입니다.\\n    *   다수의 LSTM 레이어와 Dense 레이어로 구성된 모델을 구축하고 훈련하여 향후 7일 주가를 예측했을 것입니다.\\n\\n5.  **모델 정확도 평가 및 비교:**\\n    *   각 모델(ARIMA/SARIMA, LSTM)의 7일 예측 결과를 실제 테스트 세트와 비교하여 RMSE(Root Mean Squared Error), MAE(Mean Absolute Error), MAPE(Mean Absolute Percentage Error) 등의 지표를 사용하여 예측 정확도를 평가했을 것입니다.\\n    *   두 모델의 성능을 비교하고, 어떤 모델이 주어진 데이터의 특성(예: 선형성, 비선형성, 계절성)을 더 잘 반영하여 예측했는지 분석했을 것입니다.\\n\\n**종합 결과:**\\n데이터가 제공되지 않아 구체적인 예측 결과나 모델별 정확도, 그리고 최종적인 종합 결과를 제공할 수 없습니다. 위에서 설명한 분석 절차를 통해 최적의 예측 모델을 도출하고, 각 모델의 장단점 및 예측 성능에 대한 종합적인 평가를 수행했을 것입니다. 주가 예측은 본질적으로 높은 불확실성을 가지며, 외부 요인에 크게 영향을 받으므로, 단일 모델보다는 여러 모델의 예측을 종합하는 앙상블 기법이 더 견고한 결과를 제공할 수 있습니다.\"\n}"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 135,
+            "candidatesTokenCount": 769,
+            "totalTokenCount": 2740,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 135
+              }
+            ],
+            "thoughtsTokenCount": 1836
+          },
+          "modelVersion": "gemini-2.5-flash",
+          "responseId": "gP71aIvYNquE7M8P9KCw0Qw"
+        }
+      }
+    ],
+    "Message a model3": [
+      {
+        "json": {
+          "candidates": [
+            {
+              "content": {
+                "parts": [
+                  {
+                    "text": "{\n    \"추세 분석 (Trend Analysis)\": {\n        \"점수\": 100,\n        \"근거\": \"정배열로 장기(60일), 중기(20일), 단기(5일) 이동평균선이 모두 상승하며 강한 상승 추세를 형성하고 있습니다. (종가 98,100 > 5일MA 96,060 > 20일MA 90,210 > 60일MA 79,703) 종가(98,100)가 5일 이동평균선(96,060) 위에 위치하여 단기 상승 모멘텀이 유지되고 있습니다. 5일 이동평균선이 상승 중입니다. 20일 이동평균선이 상승 중입니다. 60일 이동평균선이 상승 중입니다. 전체 기간 동안 주가가 75.49% 크게 상승하여 강력한 상승 추세를 보여줍니다.\"\n    },\n    \"모멘텀 분석 (Momentum Analysis)\": {\n        \"점수\": 95,\n        \"근거\": \"RSI(75.39)가 70 이상으로 과매수 구간에 진입했으나, 강한 상승 모멘텀을 나타냅니다. RSI가 직전일 대비 상승하여 모멘텀이 강화되고 있습니다. Stochastic %K(94.87)와 %D(94.72)가 80 이상으로 과매수 구간이지만 강한 모멘텀을 나타냅니다. MACD 선이 시그널 선 위에 있고 MACD 히스토그램(1170.54)이 양수이며 확장 중으로 상승 모멘텀이 강합니다.\"\n    },\n    \"거래량 분석 (Volume Analysis)\": {\n        \"점수\": 35,\n        \"근거\": \"금일 거래량(17,555,614)이 최근 5일 평균 거래량(25,004,566) 대비 20% 이상 감소했습니다. 주가는 상승했으나 거래량이 부족하여 상승세가 약할 수 있습니다.\"\n    },\n    \"외국인 수급 분석 (Foreign Investor Activity Analysis)\": {\n        \"점수\": 75,\n        \"근거\": \"최근 20거래일 동안 외국인 소진율이 1.49%p 증가하여 외국인 매수세가 강함을 보여줍니다. (20일 전 51.38% -> 현재 52.15%) 금일 외국인 소진율(52.15%)은 직전일과 동일합니다. 현재 외국인 소진율(52.15%)은 최근 5일 평균(52.07%)과 유사한 수준입니다.\"\n    },\n    \"종합 평가 (Overall Evaluation)\": {\n        \"점수\": 81,\n        \"근거\": \"대체로 긍정적인 기술적 신호를 보이며, 상승 추세가 유지되거나 강화될 여지가 있습니다.\"\n    }\n}"
+                  }
+                ],
+                "role": "model"
+              },
+              "finishReason": "STOP",
+              "index": 0
+            }
+          ],
+          "usageMetadata": {
+            "promptTokenCount": 5999,
+            "candidatesTokenCount": 693,
+            "totalTokenCount": 26008,
+            "promptTokensDetails": [
+              {
+                "modality": "TEXT",
+                "tokenCount": 5999
+              }
+            ],
+            "thoughtsTokenCount": 19316
+          },
+          "modelVersion": "gemini-2.5-flash",
+          "responseId": "4f71aMu9DsOG28oPsobA2Qw"
+        }
+      }
+    ],
+    "Edit Fields4": [
+      {
+        "json": {
+          "title": "수급 분석 방식",
+          "score": "92\n",
+          "reason": "제공된 주가 데이터가 없어 실제 예측을 수행할 수는 없으나, 주어진 요청에 따라 시계열 예측 및 기법 분석(ARIMA/SARIMA, LSTM, 변동성/수익률 분석)을 이용한 7일 주가 예측 및 모델 정확도 평가에 대한 종합적인 분석 과정을 설명합니다.\n\n**1. 데이터 전처리 및 탐색적 분석 (Data Preprocessing & EDA)**\n*   **결측치 및 이상치 처리:** 제공된 100일 이상의 주가 데이터에서 결측값(NaN)이 있다면 선형 보간(linear interpolation) 또는 이전 값으로 채우기(forward fill) 등의 방법으로 처리합니다. 급격한 주가 변동이 이상치로 판단될 수 있으나, 주가 데이터의 특성상 실제 이벤트에 의한 것일 수 있으므로 신중하게 접근합니다.\n*   **데이터 정규화/스케일링:** LSTM과 같은 신경망 모델은 입력 데이터의 스케일에 민감하므로, Min-Max Scaler 또는 Standard Scaler를 사용하여 데이터를 0과 1 사이 또는 평균 0, 표준편차 1로 스케일링합니다.\n*   **시계열 특성 확인:** 주가 데이터를 시각화하여 추세(trend), 계절성(seasonality, 주가는 덜 명확), 주기성(cyclicity) 등의 패턴을 파악합니다. 이동 평균(Moving Average)과 이동 표준편차(Moving Standard Deviation)를 계산하여 비정상성(non-stationarity) 여부를 시각적으로 확인합니다.\n*   **정상성 검정:** ADF(Augmented Dickey-Fuller) 테스트를 통해 데이터의 정상성을 통계적으로 검정합니다. ARIMA 모델 적용을 위해 필요합니다.\n\n**2. 시계열 예측 모델**\n\n**2.1. ARIMA/SARIMA 모델**\n*   **개념:** ARIMA(Autoregressive Integrated Moving Average) 모델은 시계열 데이터의 과거 값, 오차 항, 그리고 차분(differencing)을 통해 미래 값을 예측하는 통계 모델입니다. AR(자기회귀), I(차분), MA(이동평균) 세 가지 구성 요소가 있습니다.\n*   **적용 과정:**\n    *   **차분(Differencing):** ADF 테스트 결과 비정상 시계열일 경우, d차 차분을 통해 데이터를 정상 상태로 만듭니다. (d 값 결정)\n    *   **모수 결정:** 차분된 데이터의 ACF(Autocorrelation Function) 플롯과 PACF(Partial Autocorrelation Function) 플롯을 분석하여 AR 부분의 p, MA 부분의 q 모수를 결정합니다.\n    *   **모델 학습 및 예측:** ARIMA(p, d, q) 모델을 훈련 데이터에 적합(fit)시키고, 향후 7일간의 주가를 예측합니다.\n*   **SARIMA (Seasonal ARIMA):** 주가 데이터는 명확한 계절성을 띠지 않을 수 있지만, 특정 요일 효과나 월별 효과 등이 있다면 SARIMA(p, d, q)(P, D, Q, m) 모델을 고려할 수 있습니다.\n*   **장점:** 선형적인 시계열 패턴에 강하며, 비교적 적은 데이터로도 모델링이 가능합니다.\n*   **단점:** 비선형적인 패턴이나 급격한 시장 변화에는 취약하며, 주식 시장의 복잡한 역학 관계를 포착하기 어렵습니다.\n\n**2.2. LSTM (Long Short-Term Memory) 모델**\n*   **개념:** LSTM은 순환 신경망(RNN)의 한 종류로, 장기 의존성 문제를 해결하여 시퀀스 데이터 학습에 매우 효과적입니다. 주가와 같은 시계열 데이터의 장기적인 패턴을 학습하는 데 적합합니다.\n*   **적용 과정:**\n    *   **시퀀스 데이터 생성:** 주가 데이터를 (과거 N일의 주가) -> (다음 날의 주가)와 같은 시퀀스-투-시퀀스 형태로 변환합니다. '룩백 윈도우(look-back window)' 크기를 설정하여 입력 시퀀스를 구성합니다.\n    *   **모델 구축:** 입력 레이어, 하나 이상의 LSTM 레이어, 드롭아웃(Dropout) 레이어(과적합 방지), Dense 레이어(출력 레이어) 등으로 모델을 구성합니다.\n    *   **모델 학습 및 예측:** 스케일링된 훈련 데이터로 LSTM 모델을 학습시키고, 7일 예측을 위해 예측된 값을 다시 입력으로 사용하는 재귀적(recursive) 방식을 사용하거나 멀티-아웃풋(multi-output) 모델을 구축할 수 있습니다. 예측 후에는 스케일링을 되돌려 원래 주가 스케일로 복원합니다.\n*   **장점:** 비선형적이고 복잡한 시계열 패턴을 학습하는 데 탁월하며, 시장의 미묘한 변화를 포착할 가능성이 높습니다.\n*   **단점:** 충분한 양의 데이터가 필요하며, ARIMA에 비해 계산 비용이 높고, 모델의 내부 작동 방식이 '블랙박스'처럼 해석하기 어렵습니다.\n\n**3. 변동성 및 수익률 분석 (Volatility & Returns Analysis)**\n*   **수익률 계산:** 일별 주가 데이터를 이용하여 로그 수익률(log returns) 또는 단순 수익률(simple returns)을 계산합니다. 수익률 분포를 분석하여 정규성 여부와 왜도(skewness), 첨도(kurtosis)를 파악합니다.\n*   **변동성 측정:** 수익률의 표준편차를 계산하여 주가의 변동성을 측정합니다. 변동성 군집(volatility clustering) 현상(큰 변동성 뒤에 큰 변동성이, 작은 변동성 뒤에 작은 변동성이 이어지는 현상)을 확인합니다.\n*   **GARCH/ARCH 모델:** 주가의 변동성이 시간에 따라 변하는 이분산성(heteroscedasticity)을 모델링하기 위해 GARCH(Generalized Autoregressive Conditional Heteroskedasticity) 또는 ARCH(Autoregressive Conditional Heteroskedasticity) 모델을 사용할 수 있습니다. 이 모델들은 주가 예측 자체보다는 미래의 변동성(위험)을 예측하고, 예측 주가의 신뢰 구간을 설정하는 데 중요합니다.\n*   **역할:** 이 분석은 주가 예측 모델의 성능을 보완하고, 예측된 주가에 대한 위험도를 평가하여 투자 의사결정에 중요한 정보를 제공합니다.\n\n**4. 모델 정확도 평가 및 비교**\n*   **데이터 분할:** 전체 데이터를 훈련 세트(예: 80-90%)와 테스트 세트(예: 10-20%)로 분할합니다. 시계열 데이터의 특성상 미래 시점을 예측해야 하므로, 반드시 시간 순서에 따라 분할합니다.\n*   **평가 지표:** 각 모델의 예측 성능을 객관적으로 평가하기 위해 다음과 같은 지표를 사용합니다.\n    *   **RMSE (Root Mean Squared Error):** 예측 오차의 크기를 측정하며, 큰 오차에 더 큰 가중치를 줍니다.\n    *   **MAE (Mean Absolute Error):** 예측 오차의 절대값 평균으로, 오차의 평균적인 크기를 직관적으로 나타냅니다.\n    *   **MAPE (Mean Absolute Percentage Error):** 예측 오차를 백분율로 나타내어 상대적인 오차를 파악하기 용이합니다.\n    *   **R-squared:** 모델이 얼마나 데이터의 분산을 잘 설명하는지 나타냅니다.\n*   **교차 검증 (Cross-validation):** 시계열 데이터에는 일반적인 K-fold 교차 검증 대신 시계열 교차 검증(Time Series Cross-Validation) 기법을 사용하여 모델의 일반화 성능을 보다 신뢰성 있게 평가합니다.\n*   **모델 비교:** ARIMA/SARIMA와 LSTM 모델의 평가 지표를 비교하여 어떤 모델이 제공된 데이터에서 더 우수한 예측 성능을 보이는지 파악합니다. 경우에 따라 두 모델의 예측값을 결합하는 앙상블(ensemble) 기법을 고려할 수도 있습니다.\n\n**5. 7일 주가 예측 및 종합 결론**\n*   **최종 예측:** 가장 높은 정확도를 보인 모델(또는 앙상블 모델)을 최종 선택하여 향후 7일간의 주가를 예측합니다. LSTM은 단기 예측에 강점을 보일 수 있으며, ARIMA는 보다 안정적인 추세 예측에 적합할 수 있습니다.\n*   **한계점:** 주가 예측은 본질적으로 매우 어렵습니다. 주식 시장은 과거 데이터의 패턴뿐만 아니라 뉴스, 경제 지표, 기업 실적, 거시 경제 상황, 투자 심리 등 예측 불가능한 다양한 외부 요인에 크게 영향을 받습니다. 따라서 어떤 모델도 100% 정확한 예측은 불가능하며, 모델은 단지 과거 데이터의 통계적 패턴을 기반으로 한 확률적 추정치일 뿐입니다.\n*   **종합 의견:** 기술적 분석(시계열 예측)은 주가 움직임의 한 단면만을 제공합니다. 성공적인 투자 의사결정을 위해서는 기술적 분석과 함께 기업의 펀더멘털 분석, 거시 경제 분석, 그리고 시장 상황에 대한 깊은 이해가 필수적입니다.\n"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Message a model4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Message a model3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Message a model2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Message a model4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "eb81daa5-6685-4581-b783-eeed0becbaf0",
+  "meta": {
+    "instanceId": "ffdee27c5ac96a4ad856bb831a5135d6c6b403bb2f8bc6e2eb43d54aae46977e"
+  },
+  "id": "O1PQQRsae0cUgNIu",
+  "tags": []
+}
