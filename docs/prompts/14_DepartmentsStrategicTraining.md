@@ -3,8 +3,11 @@
 
 첨부된 [프롬포트_교육훈련 마스터 플랜수립의 내용]을 참고하여 교육훈련 마스터플랜을 출력해주세요.
 <br></br>**출력 시 필수 포함외 추가로 제안하는 내용은 별도 표기 요망** <br></br>
-[입력 데이터]
 
+[첨부파일]<br>
+md.파일로 별도 첨부 
+
+[입력 데이터]
 https://drive.google.com/drive/folders/1ALKWidvkuEP3PfuF31Mi-787phwZ4K0u
 
 <br></br>
