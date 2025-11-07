@@ -1,0 +1,314 @@
+{
+  "name": "quests/19_n8n_api_diskfiles",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1vjkmCAtp4fAdd2SQJbLqjXRKcgvc8y_Kr-HPnGW4Quo/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet_1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1vjkmCAtp4fAdd2SQJbLqjXRKcgvc8y_Kr-HPnGW4Quo/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1168,
+        -176
+      ],
+      "id": "09ca106e-4b0f-4776-b4c8-d6e06f27c11b",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zWutXgEiTiJ2nAip",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f529f6c2-f34e-4b4b-9fd4-1df5b9076b00",
+              "name": "Narration",
+              "value": "={{ $json.Narration }}",
+              "type": "string"
+            },
+            {
+              "id": "84dd9ad5-9d89-485c-8775-74e2e434ffc2",
+              "name": "roopname",
+              "value": "={{ $runIndex }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -672,
+        -32
+      ],
+      "id": "e9ccf1a3-fb3c-4523-8fab-d0d465416aed",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -880,
+        -176
+      ],
+      "id": "0d04cabc-4449-4ba9-92aa-9e8995b7e70a",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "name": "Replace Me",
+      "typeVersion": 1,
+      "position": [
+        1056,
+        144
+      ],
+      "id": "4802d7f2-31e7-45b9-871f-86c26f1a11b7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-goog-api-key",
+              "value": "AIzaSyB2ydV1BLn5_5ejixByK6RumAdQweRACbM"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"{{ $json.Narration }}\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"responseModalities\": [\n      \"AUDIO\"\n    ],\n    \"speechConfig\": {\n      \"voiceConfig\": {\n        \"prebuiltVoiceConfig\": {\n          \"voiceName\": \"Kore\"\n        }\n      }\n    }\n  }\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -384,
+        -32
+      ],
+      "id": "2446f5d0-9ec3-48c9-81be-546776699322",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "candidates[0].content.parts[0].inlineData.data",
+        "binaryPropertyName": "=data",
+        "options": {
+          "fileName": "=Narration{{ $('Edit Fields1').item.json.roopname }}"
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        -128,
+        -32
+      ],
+      "id": "46b5cffb-7178-4e4a-accc-0e6aa3891b72",
+      "name": "Convert to File2"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=/home/node/output/data{{ $('Edit Fields1').item.json.roopname }}.pcm",
+        "dataPropertyName": "=data",
+        "options": {
+          "append": false
+        }
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        352,
+        -32
+      ],
+      "id": "19d8a7e9-ae25-4302-9079-b022b1236182",
+      "name": "Read/Write Files from Disk4"
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        112,
+        -32
+      ],
+      "id": "67d49d35-1c80-496d-ad0d-b1ad14f29d7a",
+      "name": "Wait2",
+      "webhookId": "bd0f2041-e69d-44dd-9a6a-91436c156969"
+    },
+    {
+      "parameters": {
+        "command": "=cd /home/node/output/ && ffmpeg -f s16le -ar 24000 -ac 1 -i data{{ $('Edit Fields1').item.json.roopname }}.pcm outdata{{ $('Edit Fields1').item.json.roopname }}.wav"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        592,
+        -32
+      ],
+      "id": "94b039ff-cd11-4f9f-829a-423320874fab",
+      "name": "Execute Command3"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1200,
+        -368
+      ],
+      "id": "af3ceaa8-efcd-48fd-b83a-f04b53a8ffa7",
+      "name": "When clicking ‘Execute workflow’"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Replace Me": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Convert to File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File2": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk4": {
+      "main": [
+        [
+          {
+            "node": "Execute Command3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command3": {
+      "main": [
+        [
+          {
+            "node": "Replace Me",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4c8de617-2c99-4526-9ec9-05233116745b",
+  "meta": {
+    "instanceId": "d6a4f5423e304334bf7b4fd5850b972e7c498301bd4a10979f26ee4e101fb4fe"
+  },
+  "id": "8RU327gyKK8uNs0t",
+  "tags": []
+}
