@@ -1,0 +1,1469 @@
+{
+  "name": "TeamJH_Auto_Short",
+  "nodes": [
+    {
+      "parameters": {
+        "fieldToSplitOut": "text",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -656,
+        16
+      ],
+      "id": "bf68ff40-19bf-4961-af2b-2c144f2adb93",
+      "name": "Split Out2"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "시트1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key_date": "={{ $('Append or update row in sheet2').item.json.key_date }}",
+            "scene_Narration": "=s#1{{ $('Edit Fields7').item.json.text['s#1 script'] }}, s#2{{ $('Edit Fields7').item.json.text['s#2 script'] }}, s#3{{ $('Edit Fields7').item.json.text['s#3 script'] }}, s#4{{ $('Edit Fields7').item.json.text['s#4 script'] }}",
+            "scene_description": "=s#1{{ $('Edit Fields7').item.json.text['s#1 description'] }}, s#2{{ $('Edit Fields7').item.json.text['s#2 description'] }}, s#3{{ $('Edit Fields7').item.json.text['s#3 description'] }}, s#4{{ $('Edit Fields7').item.json.text['s#4 description'] }}"
+          },
+          "matchingColumns": [
+            "key_date"
+          ],
+          "schema": [
+            {
+              "id": "key_date",
+              "displayName": "key_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Link or Contents",
+              "displayName": "Link or Contents",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "scene_Narration",
+              "displayName": "scene_Narration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "scene_description",
+              "displayName": "scene_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "shorts_URL",
+              "displayName": "shorts_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -496,
+        16
+      ],
+      "id": "033ee7ff-8c8e-4e12-8c67-1b4e5cfd8f1e",
+      "name": "Append or update row in sheet4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zWutXgEiTiJ2nAip",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f772cdf2-607a-48b3-9a4f-2064f12d8a1e",
+              "name": "text",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -832,
+        16
+      ],
+      "id": "1a2a656a-fd19-48c3-8f8f-1136ca6546df",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "content": "## 선정 주제 시나리오 구글 시트에 업로드",
+        "height": 208,
+        "width": 992
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1312,
+        -32
+      ],
+      "typeVersion": 1,
+      "id": "ade92012-856d-4ecf-ae88-a086801c124d",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "시트1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "key_date",
+              "lookupValue": "={{ $json.key_date }}"
+            },
+            {
+              "lookupColumn": "Link or Contents",
+              "lookupValue": "={{ $json['Link or Contents'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1280,
+        16
+      ],
+      "id": "da345721-970d-4252-b8ed-6ea685e47132",
+      "name": "Get row(s) in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zWutXgEiTiJ2nAip",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=당신은 흥미로운 과학 소식을 짧고 간략하게 소개해주는 20년차 과학 유튜버 전문가입니다.주제에 맞는 4컷으로 시나리오를 작성해주세요.출력 형식 예시를 반드시 준수 (인삿말 들어가지마세요)\n\n**제약조건**\n- 1분 분량의 시나리오 \n\n**주제**\n{{ $json['Link or Contents'] }}\n\n**시나리오 출력 예시**\ns#1 script: 텍스트\ns#1 description : 텍스트"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        16
+      ],
+      "id": "85f851b7-5bca-43da-9bda-1f2f6ffae82b",
+      "name": "Message a model4",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "mbpdMjXHUeGbQQ7i",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "558c2e45-96d2-4512-bc30-49a0113237e9",
+              "name": "Subject",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -848,
+        -240
+      ],
+      "id": "69bdf035-1eb3-4202-af49-4c5359ac88a6",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1280,
+        -240
+      ],
+      "id": "8f0852f8-a284-4646-afae-8f184342afca",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "시트1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key_date": "={{ $('Schedule Trigger1').item.json['Readable date'] }}",
+            "Subject": "={{ $json.Subject.Subject }}",
+            "Status": "OK",
+            "Link or Contents": "={{ $json.Subject.Contesns }}"
+          },
+          "matchingColumns": [
+            "key_date"
+          ],
+          "schema": [
+            {
+              "id": "key_date",
+              "displayName": "key_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Link or Contents",
+              "displayName": "Link or Contents",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "scene_Narration",
+              "displayName": "scene_Narration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "scene_description",
+              "displayName": "scene_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "shorts_URL",
+              "displayName": "shorts_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -704,
+        -240
+      ],
+      "id": "86f93665-f050-48a1-9f77-3eb255765bb1",
+      "name": "Append or update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zWutXgEiTiJ2nAip",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=당신은 흥미로운 과학 소식을 짧고 간략하게 소개해주는 20년차 과학 유튜버 전문가입니다.\n\n오늘의 날짜 {{ $json[\"Readable date\"] }}\n\n요일마다 다른 과학주제를 소개해려고 합니다. 오늘의 날짜에 맞춰서 주제를 선정해주세요. 출력 형식 예시를 반드시 준수 (인삿말 들어가지마세요)\n\n**요일별 주제**\n월 : 출근길/등굣길 테크 과학\n화 : 맛있는 주방 화학 \n수 : 의학 & 인체 탐구\n목 : 도시 & 사물 과학 \n금 : 문화 & 취미 속 과학 \n토 : 청소 & 생활용품 과학\n일 : 반려동물 & 자연 관찰 \n\n**주제 예시**\n예: 왜 잠을 자야 할까?, 커피를 마시면 왜 각성될까?, 딸꾹질은 왜 날까?\n\n**출력 형식 예시**\nSubject : 요일별 주제 \nContesns : (요일별 주제에 맞는 주제)"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1136,
+        -240
+      ],
+      "id": "55973c9e-1d43-4e81-84b0-500e5fc3fb5d",
+      "name": "Message a model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "mbpdMjXHUeGbQQ7i",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## 주제선정\n",
+        "height": 192,
+        "width": 736
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1312,
+        -288
+      ],
+      "typeVersion": 1,
+      "id": "536cc4ed-be5b-43bb-87b2-ca80dce12250",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "resources",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -704,
+        528
+      ],
+      "id": "19ae116d-c9e0-42cc-97b9-664bc1705a72",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -320,
+        528
+      ],
+      "id": "b979f801-be5f-4faf-90f4-e492a7ecbabc",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -320,
+        816
+      ],
+      "id": "4c91e074-8a21-4ada-bad2-27528c1ccf7a",
+      "name": "Loop Over Items3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "236be14e-d1d1-4b8c-950b-1b1ec059f87b",
+              "name": "resources",
+              "value": "/home/node/resources/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1056,
+        272
+      ],
+      "id": "ab78c49f-afb6-414c-983f-fba12eb42193",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "command": "=mkdir -p {{ $json.resources }} && cd {{ $json.resources }} && touch list.txt"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        272
+      ],
+      "id": "ab72c67d-1514-4a1a-9133-23effa4bbcb5",
+      "name": "Execute Command1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-goog-api-key",
+              "value": "AIzaSyD_M5ntvAPC4z8d7M7DLEV5ta9lAgX2Xms"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"이미지를 제작하여 대답없이 이미지만을 도출해줘  [내용]{{ $json.resources }}\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -128,
+        832
+      ],
+      "id": "e5378626-c512-49a4-9344-5b2ab60ea8db",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "candidates[0].content.parts[1].inlineData.data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        832
+      ],
+      "id": "8085a50d-89f2-4882-8cd3-cf58cfc7838d",
+      "name": "Convert to File2"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('Edit Fields1').item.json.resources }}scene{{ $runIndex +1 }}.png",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        208,
+        832
+      ],
+      "id": "c2d7bcbc-3887-44df-8f95-4978b86faf7b",
+      "name": "Read/Write Files from Disk3"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-goog-api-key",
+              "value": "AIzaSyD_M5ntvAPC4z8d7M7DLEV5ta9lAgX2Xms"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"{{ $json.resources }}\"\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"responseModalities\": [\n      \"AUDIO\"\n    ],\n    \"speechConfig\": {\n      \"voiceConfig\": {\n        \"prebuiltVoiceConfig\": {\n          \"voiceName\": \"Kore\"\n        }\n      }\n    }\n  },\n  \"model\": \"gemini-2.5-flash-preview-tts\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -128,
+        544
+      ],
+      "id": "2b84e73f-3ebe-4762-838c-c9b55ba9b197",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "candidates[0].content.parts[0].inlineData.data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        32,
+        544
+      ],
+      "id": "55d1c452-b355-4087-970f-82c14deaccb2",
+      "name": "Convert to File3"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "={{ $('Edit Fields1').item.json.resources }}scene{{ $runIndex +1 }}.pcm",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        208,
+        544
+      ],
+      "id": "56e8b1e0-3351-4c71-9e73-d6d80e7702da",
+      "name": "Read/Write Files from Disk4"
+    },
+    {
+      "parameters": {
+        "command": "=cd {{ $('Edit Fields1').item.json.resources }} && ffmpeg -f concat -safe 0 -i list.txt -c copy shortsfin.mp4"
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        1024
+      ],
+      "id": "0a50eda1-d180-4879-b65e-3c1a6284be41",
+      "name": "Execute Command4"
+    },
+    {
+      "parameters": {
+        "fileSelector": "/home/node/resources/shortsfin.mp4",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        -864,
+        1024
+      ],
+      "id": "299d129a-0166-4033-a58a-dd49569e26e8",
+      "name": "Read/Write Files from Disk5"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o",
+          "mode": "list",
+          "cachedResultName": "shorts",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "시트1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "생성완료",
+            "shorts_URL": "={{ $json.fileName }}",
+            "key_date": "={{ $('Get row(s) in sheet2').item.json.key_date }}"
+          },
+          "matchingColumns": [
+            "key_date"
+          ],
+          "schema": [
+            {
+              "id": "key_date",
+              "displayName": "key_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Link or Contents",
+              "displayName": "Link or Contents",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "scene_Narration",
+              "displayName": "scene_Narration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "scene_description",
+              "displayName": "scene_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "shorts_URL",
+              "displayName": "shorts_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Upload_URL",
+              "displayName": "Upload_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -672,
+        1024
+      ],
+      "id": "cf81ae09-33c4-4851-a8d2-bb8c35615468",
+      "name": "Append or update row in sheet1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "시트1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -688,
+        272
+      ],
+      "id": "966720f7-2afa-4d3e-846e-ab9e1e2fd6b9",
+      "name": "Get row(s) in sheet2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "147ae760-0672-40e1-8ade-7bbe4230ef1e",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "OK",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -512,
+        272
+      ],
+      "id": "2e6755da-7251-47bb-834d-d1a828f22725",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Narration과 description을 n8n에서 사용할 수 있는 JSON 형식으로 나타내줘\n\n[Narration]\n{{ $json.scene_Narration }}\n[description]\n{{ $json.scene_description }}\n\n\n[출력 형식]\n\"Narration1\" : \"텍스트\"\n\"Narration2\" : \"텍스트\"\n\"description1\" : \"텍스트\"\n\"description2\" : \"텍스트\""
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1216,
+        528
+      ],
+      "id": "a8b75d94-873d-4500-b2bb-d3a27f490f42",
+      "name": "Message a model1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "29e97b97-ac8a-4f6e-bae3-2256bfcf7ed8",
+              "name": "resources",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -896,
+        528
+      ],
+      "id": "a77fbd56-202d-4cab-952b-1f8e7869dc39",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -304,
+        256
+      ],
+      "id": "d96f3802-e2ff-47ce-991d-49d265bfbc44",
+      "name": "Loop Over Items4"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        480,
+        784
+      ],
+      "id": "da76443d-34a2-47c2-bbed-276422071de5",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "maxItems": "={{ $items().length / 2 }}"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        640,
+        784
+      ],
+      "id": "e3d6feb1-b96f-404e-9a85-9d8bbcf6438e",
+      "name": "Limit4"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -1216,
+        1040
+      ],
+      "id": "d5216662-db80-46c4-ab37-6ca80255da41",
+      "name": "Loop Over Items5"
+    },
+    {
+      "parameters": {
+        "maxItems": "={{ $items().length / $items().length }}"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        1168
+      ],
+      "id": "e07d820f-99ac-468b-9a7b-151534f3c051",
+      "name": "Limit5"
+    },
+    {
+      "parameters": {
+        "command": "=cd {{ $('Edit Fields1').item.json.resources }} && ffmpeg -loop 1 -i scene{{$runIndex + 1}}.png -f s16le -ar 24000 -ac 1 -i scene{{$runIndex + 1}}.pcm -c:v libx264 -c:a aac -pix_fmt yuv420p -shortest scene{{$runIndex + 1}}.mp4 && echo \"file scene{{$runIndex + 1}}.mp4\" >> list.txt "
+      },
+      "type": "n8n-nodes-base.executeCommand",
+      "typeVersion": 1,
+      "position": [
+        -864,
+        1168
+      ],
+      "id": "fdb9d93b-c70d-4d23-a1a3-4142fcdb9560",
+      "name": "Execute Command5"
+    },
+    {
+      "parameters": {
+        "content": "## png 파일 생성\n",
+        "height": 176,
+        "width": 912,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        768
+      ],
+      "id": "67bef0c7-9910-420a-9091-c4fea990ad43",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "maxItems": "={{ $items().length / 2 }}"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        528
+      ],
+      "id": "b4b57d93-6775-418e-b8db-21ad5c7a1503",
+      "name": "Limit6"
+    },
+    {
+      "parameters": {
+        "maxItems": "={{ $items().length / 2 }}",
+        "keep": "lastItems"
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -496,
+        816
+      ],
+      "id": "1b7794f0-d229-424f-bca0-4f379ccfe2bd",
+      "name": "Limit7"
+    },
+    {
+      "parameters": {
+        "content": "## pcm 파일 생성",
+        "height": 176,
+        "width": 912
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -528,
+        480
+      ],
+      "id": "d51fc6c0-a158-4d00-be69-e25d12cfda3c",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1296,
+        272
+      ],
+      "id": "07cfb02a-25f5-4a6c-9144-c798eb3dc8f2",
+      "name": "Schedule Trigger2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Split Out2": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet4": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Split Out2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Message a model4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model4": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Message a model3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Limit6",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Limit7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Execute Command1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Convert to File2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File2": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk3": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Convert to File3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File3": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk4": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command4": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk5": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet2": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items4": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Message a model1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Limit4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit4": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items5": {
+      "main": [
+        [
+          {
+            "node": "Execute Command4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Limit5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit5": {
+      "main": [
+        [
+          {
+            "node": "Execute Command5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Command5": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit6": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit7": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "31f60ec1-c20a-4ca8-8ba6-c5adc828327b",
+  "meta": {
+    "instanceId": "d6a4f5423e304334bf7b4fd5850b972e7c498301bd4a10979f26ee4e101fb4fe"
+  },
+  "id": "Xcg85Oq0S2Z3Oz7V",
+  "tags": []
+}
