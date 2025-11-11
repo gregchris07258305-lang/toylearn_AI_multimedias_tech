@@ -1,0 +1,282 @@
+{
+  "name": "Team Project",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## 주제선정\n- 특정 시간이 되면 자동 주제",
+        "width": 288
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -336,
+        -656
+      ],
+      "typeVersion": 1,
+      "id": "8fb3c2d3-ed86-4799-9463-d24dfd98ec32",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=당신은 흥미로운 과학 소식을 짧고 간략하게 소개해주는 20년차 과학 유튜버 전문가입니다.\n\n오늘의 날짜 {{ $json[\"Readable date\"] }}\n\n요일마다 다른 과학주제를 소개해려고 합니다. 오늘의 날짜에 맞춰서 주제를 선정해주세요. 출력 형식 예시를 반드시 준수 (인삿말 들어가지마세요)\n\n**요일별 주제**\n월 : 출근길/등굣길 테크 과학\n화 : 맛있는 주방 화학 \n수 : 의학 & 인체 탐구\n목 : 도시 & 사물 과학 \n금 : 문화 & 취미 속 과학 \n토 : 청소 & 생활용품 과학\n일 : 반려동물 & 자연 관찰 \n\n**주제 예시**\n예: 왜 잠을 자야 할까?, 커피를 마시면 왜 각성될까?, 딸꾹질은 왜 날까?\n\n**출력 형식 예시**\nSubject : 요일별 주제 \nContesns : (요일별 주제에 맞는 주제)"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        -112,
+        -208
+      ],
+      "id": "cb3760e2-f21a-4c96-bd93-6312375768b1",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "mbpdMjXHUeGbQQ7i",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "시트1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1alBHii9uq92UwSfY60bbOhGSeKZwB_cYcivGrhHx26o/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "key_date": "={{ $('Schedule Trigger').item.json['Readable date'] }}",
+            "Status": "=OK",
+            "Link or Contents": "={{ $json.Subject.Contents }}",
+            "Subject": "={{ $json.Subject.Subject }}"
+          },
+          "matchingColumns": [
+            "key_date"
+          ],
+          "schema": [
+            {
+              "id": "key_date",
+              "displayName": "key_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Link or Contents",
+              "displayName": "Link or Contents",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "scene_Narration",
+              "displayName": "scene_Narration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "scene_description",
+              "displayName": "scene_description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "shorts_URL",
+              "displayName": "shorts_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Upload_URL",
+              "displayName": "Upload_URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        -208
+      ],
+      "id": "3585d271-8874-49d3-ba4c-d9ce170aeba5",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "zWutXgEiTiJ2nAip",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -320,
+        -208
+      ],
+      "id": "cc5fbc6b-c560-4c87-9ce1-de39c65ed13b",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "558c2e45-96d2-4512-bc30-49a0113237e9",
+              "name": "Subject",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        -208
+      ],
+      "id": "2cdc04b0-9337-4a9e-b197-64a8aa0aec4e",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {
+    "Message a model": [
+      {
+        "json": {
+          "content": {
+            "parts": [
+              {
+                "text": "{\n    \"Subject\": \"출근길/등굣길 테크 과학\",\n    \"Contents\": \"교통카드는 왜 찍기만 해도 결제가 될까?\"\n}"
+              }
+            ],
+            "role": "model"
+          },
+          "finishReason": "STOP",
+          "index": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "07cf780c-b2ed-41cf-bc76-226195cc2ca8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d6a4f5423e304334bf7b4fd5850b972e7c498301bd4a10979f26ee4e101fb4fe"
+  },
+  "id": "bbf4ttM0PsBa0xAY",
+  "tags": []
+}
